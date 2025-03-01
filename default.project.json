@@ -1,0 +1,32 @@
+{
+  "name": "AndromedaV2",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "$path": "src/Shared",
+      "Abilities": {
+        "$path": "src/Abilities/Client"
+      },
+      "Packages": {
+        "$path": "Packages"
+      }
+    },
+
+    "ServerScriptService": {
+      "$path": "src/Server",
+      "Abilities": {
+        "$path": "src/Abilities/Server"
+      }
+    },
+
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "$path": "src/Client/Player"
+      },
+      "StarterCharacterScripts": {
+        "$path": "src/Client/Character"
+      }
+    }
+  }
+}
