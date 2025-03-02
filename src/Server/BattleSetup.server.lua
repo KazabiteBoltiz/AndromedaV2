@@ -12,7 +12,7 @@ local VisualEvent = Spark.Event('VisualEvent')
 local AbilityEvent = Spark.Event('AbilityEvent')
 
 local actionToAbility = {
-	Aug1 = 'ExampleAbility',
+	Aug1 = 'ExampleWeapon/ExampleAbility',
 	Aug2 = '',
 	LAtt = '',
 	HAtt = '',
@@ -24,17 +24,12 @@ AbilityEvent.Fired:Connect(function(player, action, playerData)
 	local ability = actionToAbility[action]
 	if ability == '' then return end
 
-	print('Ability Exists!')
-
 	local Character = player.Character
 	if not Character then return end
-
-	print('Character Exists!')
 
 	local battleInst = Battle.Instances[Character]
 	if not battleInst then return end
 
-	print('Activating Move!')
 	battleInst:Activate(ability)
 end)
 

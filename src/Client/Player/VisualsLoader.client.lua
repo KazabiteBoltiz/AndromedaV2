@@ -49,3 +49,19 @@ VisualEvent.Fired:Connect(function(character, effectData, action, ...)
 		end
 	end
 end)
+
+local function registerCleanup(player)
+	player.CharacterRemoving:Connect(function(character)
+		local visualInstance = visualInstances[character]
+		for _, effectTrove in visualInstance do
+			effectTrove:Clean()
+		end
+		visualInstances[character] = nil
+	end)
+end
+
+Players.PlayerAdded:Connect(registerCleanup)
+
+for _, player in Players:GetChildren() do
+	registerCleanup(player)
+end

@@ -7,19 +7,19 @@ local Status = Ability.Status
 return {
 	Status = Status.Open,
 	Start = function(battleInst, abilityInst, playerData)
-		local myTrove = abilityInst.Trove:Extend()
+		local myTrove = abilityInst.Trove
 		local Character = battleInst.Character
 
-		battleInst.Status = Status.Locked
+		battleInst.Status:Set(Status.Locked)
 
 		myTrove:Add(Effect.Start(
 			Character,
-			'ExampleAbility/ExampleEffect',
+			'ExampleWeapon/ExampleAbility/ExampleEffect',
 			Vector3.new(1,0,0)
 		))
 
 		myTrove:Add(task.delay(3, function()
-			battleInst.Status = Status.Open
+			battleInst.Status:Set(Status.Open)
 			myTrove:Clean()
 		end))
 	end

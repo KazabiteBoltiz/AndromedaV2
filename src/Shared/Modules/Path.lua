@@ -4,7 +4,7 @@ local function loopUp(root, node, path)
     end
 
     local nodeParent = node.Parent
-    if nodeParent:IsA('Folder') then
+    if nodeParent then
         table.insert(path, 1, nodeParent.Name)
     end
 

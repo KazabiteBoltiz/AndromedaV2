@@ -36,6 +36,7 @@ local Trove = require(Packages.Trove)
 
 local Modules = RepS.Modules
 local Value = require(Modules.Value)
+local Path = require(Modules.Path)
 
 local ServerScripts = game:GetService('ServerScriptService')
 local Systems = ServerScripts.Systems
@@ -57,14 +58,57 @@ function Battle.new(Character)
 	self.Status = Value.new(Status.Open)
 	self.Priority = Value.new(Priority.None)
 	self.ActiveAbility = Value.new()
+	self.Equipped = Value.new()
+	self.EquipTrove = Trove.new()
+	self.CachedItem = nil
+
+	self.Abilities = {
+		'Item'
+	}
+
 	self.Trove = Trove.new()
+	self.Combo = nil
+
+	self.Equipped.Changed:Connect(function(oldItem, newItem)
+		print(oldItem, '->', newItem)
+
+		if oldItem then
+			local oldAbilities = Tree.Find(Abilities, oldItem)
+			for _, oldAbility in oldAbilities:GetChildren() do
+				self:RemoveAbility(Path(Abilities, oldAbility, true))
+			end
+		end
+
+		if newItem then
+			local newAbilities = Tree.Find(Abilities, newItem)
+			for _, newAbility in newAbilities:GetChildren() do
+				self:AddAbility(Path(Abilities, newAbility, true))
+			end
+		end
+
+		print(self.Abilities)
+	end)
 
 	Battle.Instances[Character] = self
 
 	return self
 end
 
+function Battle:RemoveAbility(ability)
+	local abilityIndex = table.find(self.Abilities, ability)
+	if abilityIndex then
+		table.remove(self.Abilities, abilityIndex)
+	end
+end
+
+function Battle:AddAbility(ability : string)
+	local alreadyExists = table.find(self.Abilities, ability)
+	if alreadyExists then return end
+	table.insert(self.Abilities, ability)
+end
+
 function Battle:Activate(abilityPath, playerData)
+	if not table.find(self.Abilities, abilityPath) then return end
 
 	--> Ability Trigger Checking
 	local abilityRootScript = Tree.Find(Abilities, abilityPath)
@@ -79,6 +123,7 @@ function Battle:Activate(abilityPath, playerData)
 		playerData
 	)
 	local abilityStatusRequirement = require(Tree.Find(Abilities, abilityPath .. '/' .. startMove)).Status
+
 	if self.Status:Get().Value > abilityStatusRequirement.Value then
 		return
 	end
@@ -94,6 +139,28 @@ function Battle:Activate(abilityPath, playerData)
 			startMove
 		)
 	)
+
+	return true
+end
+
+function Battle:Equip(weaponPath)
+	local equipAbilityPath = weaponPath .. '/Equip'
+	local doesEquipAbilityExist = Tree.Exists(Abilities, equipAbilityPath)
+
+	if doesEquipAbilityExist then
+		--> If the weapon has a unique Equip
+		local equipAbility = Tree.Find(Abilities, equipAbilityPath)
+		self:Activate(equipAbility)
+	else
+		--> Common Item Equip Pipeline
+		self:Activate('Item', {Path = weaponPath, Action = 'Equip'})
+	end
+end
+
+function Battle:Unequip()
+	print('Unequipped!')
+	self.EquipTrove:Clean()
+	self.Equipped:Set()
 end
 
 return Battle

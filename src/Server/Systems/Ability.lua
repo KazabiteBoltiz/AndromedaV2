@@ -63,7 +63,7 @@ function Ability.new(battleInst, abilityRoot, playerData, startMove)
 	local self = setmetatable({}, Ability)
 
 	self.Battle = battleInst
-	self.Path = Path(Abilities, abilityRoot)
+	self.Path = Path(Abilities, abilityRoot, true)
 	self.Trove = battleInst.Trove:Extend()
 
 	self.Moves = {}
@@ -99,22 +99,15 @@ function Ability:Switch(newMoveName, playerData)
 
 	self.Trove:Clean()
 
-	local newMoveTask = task.spawn(function()
-		newMove.Start(
-			self.Battle,
-			self,
-			playerData
-		)
-	end)
-	self.Trove:Add(newMoveTask)
-
 	--> Basic Start/End Replication
 	AbilityEvent:Fire(
 		self.Battle.Character,
 		self.Path .. '/' .. newMoveName,
 		'Start'
 	)
+
 	self.Trove:Add(function()
+		self.Battle.ActiveAbility:Set()
 		AbilityEvent:Fire(
 			self.Battle.Character,
 			self.Path .. '/' .. newMoveName,
@@ -122,6 +115,12 @@ function Ability:Switch(newMoveName, playerData)
 		)
 	end)
 
+	--> Actually starting the Move
+	newMove.Start(
+		self.Battle,
+		self,
+		playerData
+	)
 end
 
 return Ability
