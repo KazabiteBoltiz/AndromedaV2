@@ -70,7 +70,7 @@ function Battle.new(Character)
 	self.Combo = nil
 
 	self.Equipped.Changed:Connect(function(oldItem, newItem)
-		print(oldItem, '->', newItem)
+		-- print(oldItem, '->', newItem)
 
 		if oldItem then
 			local oldAbilities = Tree.Find(Abilities, oldItem)
@@ -158,7 +158,6 @@ function Battle:Equip(weaponPath)
 end
 
 function Battle:Unequip()
-	print('Unequipped!')
 	self.EquipTrove:Clean()
 	self.Equipped:Set()
 end

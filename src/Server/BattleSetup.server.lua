@@ -12,12 +12,16 @@ local VisualEvent = Spark.Event('VisualEvent')
 local AbilityEvent = Spark.Event('AbilityEvent')
 
 local actionToAbility = {
-	Aug1 = 'ExampleWeapon/ExampleAbility',
+	Aug1 = 'Blight/LightAtt',
 	Aug2 = '',
 	LAtt = '',
 	HAtt = '',
 	Sp1 = '',
 	Sp2 = ''
+}
+
+local playerDefaultAbilities = {
+	'Default/Stun'
 }
 
 AbilityEvent.Fired:Connect(function(player, action, playerData)
@@ -36,5 +40,10 @@ end)
 Players.PlayerAdded:Connect(function(player)
 	player.CharacterAdded:Connect(function(Character)
 		local battleInst = Battle.new(Character)
+
+		--> Loading Default Abilities
+		for _, defaultAbility in playerDefaultAbilities do
+			battleInst:AddAbility(defaultAbility)
+		end
 	end)
 end)

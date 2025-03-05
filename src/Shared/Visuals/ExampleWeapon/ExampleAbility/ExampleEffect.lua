@@ -1,9 +1,9 @@
 local function Public(Character, Trove, ...)
-	print('Public Effect!')
+	return
 end
 
 local function Private(Character, Trove, ...)
-	print('Private Effect')
+	return
 end
 
 return {

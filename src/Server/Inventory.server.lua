@@ -16,7 +16,7 @@ local ProfileStore = require(ServerModules.ProfileStore)
 
 local HotbarTemplate = {
 	Slots = {
-		Primary = 'ExampleWeapon'
+		Primary = 'Blight'
 	},
 }
 
@@ -78,7 +78,10 @@ local function EquipItem(Character, itemPath)
 end
 
 EquipEvent.Fired:Connect(function(player, slot)
-	local Hotbar =	Profiles[player]
+	local plrProfile = Profiles[player]
+   if not plrProfile then return end
+
+	local Hotbar = plrProfile.Data.Slots
 
 	local doesItemExist = Hotbar[slot]
 	if not doesItemExist or doesItemExist == '' then return end

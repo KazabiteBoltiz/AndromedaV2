@@ -5,6 +5,8 @@
 
     "ReplicatedStorage": {
       "$path": "src/Shared",
+      "$ignoreUnknownInstances" : true,
+
       "Abilities": {
         "$path": "src/Abilities/Client"
       },
@@ -15,6 +17,7 @@
 
     "ServerScriptService": {
       "$path": "src/Server",
+      "$ignoreUnknownInstances" : true,
       "Abilities": {
         "$path": "src/Abilities/Server"
       }
@@ -22,10 +25,12 @@
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "$path": "src/Client/Player"
+        "$path": "src/Client/Player",
+        "$ignoreUnknownInstances" : true
       },
       "StarterCharacterScripts": {
-        "$path": "src/Client/Character"
+        "$path": "src/Client/Character",
+        "$ignoreUnknownInstances" : true
       }
     }
   }
